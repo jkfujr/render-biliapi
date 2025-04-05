@@ -1,6 +1,6 @@
 # README
 
-这是 `Render` 自托管平台的一个反代js
+这是 `Render` 托管平台的一个反代js
 
 
 ## 二次反代
