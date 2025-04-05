@@ -1,15 +1,28 @@
 # README
 
-This is the [Express](https://expressjs.com) [Hello world](https://expressjs.com/en/starter/hello-world.html) example on [Render](https://render.com).
+这是 `Render` 自托管平台的一个反代js
 
-The app in this repo is deployed at [https://express.onrender.com](https://express.onrender.com).
 
-## Deployment
+## 二次反代
 
-See https://render.com/docs/deploy-node-express-app or follow the steps below:
+**Nginx**
+```
+server {
+    listen 63044;
+    resolver 1.1.1.1 valid=300s;
 
-Create a new web service with the following values:
-  * Build Command: `yarn`
-  * Start Command: `node app.js`
-
-That's it! Your web service will be live on your Render URL as soon as the build finishes.
+    location / {
+       proxy_pass https://render-biliapi.onrender.com;
+       proxy_ssl_name render-biliapi.onrender.com;
+       proxy_ssl_server_name on;
+    }
+    
+    # 对房间信息请求api 不使用 cookie
+    location /xlive/web-room/v1/index/getInfoByRoom {
+        proxy_pass https://render-biliapi.onrender.com/xlive/web-room/v1/index/getInfoByRoom;
+        proxy_set_header Cookie "";
+        proxy_ssl_name render-biliapi.onrender.com;
+        proxy_ssl_server_name on;
+    }
+}
+```
